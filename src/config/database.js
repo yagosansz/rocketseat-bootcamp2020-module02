@@ -1,7 +1,7 @@
 // Credentials to access the database
 module.exports = {
   dialect: 'postgres',
-  host: 'localhost',
+  host: '192.168.99.100',
   username: 'postgres',
   password: 'postgres',
   database: 'gobarber',
