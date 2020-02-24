@@ -3,13 +3,16 @@
 </h1>
 
 # rocketseat-bootcamp2020-module02
+
 GoBarber Backend - Fundamental Concepts
 
 # What is this project about?
+
 This project is about practicing the basic concepts behind NodeJS that 
 were learned during the second module of GoStack 10 - Bootcamp.
 
 ## How to run this project?
+
   - Install dependencies:
     - `yarn`
   - Start the back-end:
@@ -20,6 +23,7 @@ were learned during the second module of GoStack 10 - Bootcamp.
 #### Setting up the project structure
 
 #### Docker Fundamentals
+
   * How does it work?
     - Creates isolated environments (containers)
       - Isolated environments contains tools/technologies that will not change/edit our server's behaviour
@@ -37,6 +41,7 @@ were learned during the second module of GoStack 10 - Bootcamp.
       - 'recipe' to create your own customized docker image
   
 #### Configuring Docker
+
   * Creates an instance of PostgreSQL named postgresdb.
   ```docker
   docker run --name postgresdb -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
@@ -63,6 +68,7 @@ were learned during the second module of GoStack 10 - Bootcamp.
   ```
 
 #### Sequelize & MVC
+
   * ORM (Object Relational Mapper): way of abstracting a database
     - Changes the way the application communicates with the database
   * Tables are now represented by Models
@@ -121,6 +127,7 @@ were learned during the second module of GoStack 10 - Bootcamp.
     - It should only contain 5 methods (index, show, store, edit, delete)
 
 #### ESLint, Prettier & EditorConfig
+
   - Tools that will maintaing the code standard
 
   * ESLint
@@ -140,6 +147,7 @@ were learned during the second module of GoStack 10 - Bootcamp.
     - It will help maintaining the same code standards/styles throughout different editors
 
 #### User Migration
+
   * Creates the migration file for the users table
   ```
     yarn sequelize migration:create --name=create-users
@@ -156,4 +164,70 @@ were learned during the second module of GoStack 10 - Bootcamp.
   ```
     yarn sequelize db:migrate:undo:all
   ```
-### Day 02 - 2020/02/22
+### Day 02 - 2020/02/23
+#### Creating Models Loader
+
+  * It will connect to the database and load our application's Models.
+    - `src/database/index.js`
+
+#### Generating Password Hash
+
+  * Generate password_hash
+    - `yarn add bcryptjs`
+  * The field/attributes in the Model do not need to reflect 100% of what is in the database.
+  * ***Hooks*** are a Sequelize functionality
+    - Parts of the code are executed automatically, based on the actions that are being performed by the Model
+
+#### JWT (JSON Web Token) Concepts
+
+  * It's a way of authenticating in RESTful services
+
+  * JWT Authentication
+    - [POST] http://api.com/sessions
+  
+    ```json
+      "email": "user@email.com",
+      "password": "password"
+    ```
+
+  * After user credentials are validated a JWT Token is generated for the user's session
+
+  * Structure of a JWT Token
+    <ol>
+      <li>Headers (i.e.: what algorithm was used to generated the token)</li>
+      <li>Payload (Additional data: id, name, email)</li>
+      <li>Signature - (Makes sure the token cannot be edited)</li>
+    </ol>
+
+#### JWT Authentication
+
+  * `yarn add jsonwebtoken`
+
+  * All jwt token has an expiry date
+
+  * `src/config/auth.js`
+
+#### Authentication Middleware
+
+  * Update route can only be accessed by users that have been authenticated
+    - It protects the route from being accessed by users that have not been previously authenticated
+  * A middleware must be used
+    - It can be local or global. If it's a global middleware it will only be triggered by routes declared after it
+  * JWT Token must be sent through the header (e.g.: Bearer 7812yhdahsBysahjdahskdas...)
+
+  * `src/app/middleware/auth.js`
+    ```javascript
+      const decode = await promisify(jwt.verify)(token, authCOnfig.secret);
+    ```
+#### Validating Data Input
+
+  * `yarn add yup`
+    - Schema validation library
+  * `import * as Yup from 'yup'`
+    - Does not has 'export as default'
+  
+  ``` javascript
+    // An object will be validated (e.g.: req.body)
+    // shape({}) represents the 'structure' the object needs to have
+    const schema = Yup.object().shape({});
+  ```
