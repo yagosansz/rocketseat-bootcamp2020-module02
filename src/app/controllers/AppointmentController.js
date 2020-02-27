@@ -63,7 +63,7 @@ class AppointmentController {
     if (!isProvider) {
       return res
         .status(401)
-        .json({ error: 'You can only create appointments with providers' });
+        .json({ error: 'Appointments can only be created by providers' });
     }
 
     // Check for past dates
