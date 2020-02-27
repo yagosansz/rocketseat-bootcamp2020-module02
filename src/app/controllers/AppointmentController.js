@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import { Op } from 'sequelize';
 
 import Appointment from '../models/Appointment';
 import User from '../models/User';
@@ -50,7 +51,13 @@ class AppointmentController {
 
     // Check if provider_id is a provider
     const isProvider = await User.findOne({
-      where: { id: provider_id, provider: true }
+      where: {
+        id: {
+          [Op.eq]: provider_id,
+          [Op.ne]: req.userId // Cannot create appointments with yourself
+        },
+        provider: true
+      }
     });
 
     if (!isProvider) {
